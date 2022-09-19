@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 
 import org.junit.AfterClass;
@@ -22,8 +23,9 @@ public class IndexTest {
 	public static void setUpBeforeClass() throws Exception {
 	
 		File testFile = new File("testFile.txt");
-		FileWriter writeInTest = new FileWriter(testFile);
-		writeInTest.write("This is the test");
+		PrintWriter writer = new PrintWriter("testFile.txt");
+		writer.write("This is the test");
+		writer.close();
 	}
 
 	@AfterAll
@@ -56,20 +58,37 @@ public class IndexTest {
 		while(br.ready()) {
 			if(br.readLine().equals(fileName + " : " + blobby.getShawedString())) {
 				checker = true;
-				
+				assertTrue(checker);
+
 			}
 			
 		}
-		assertTrue(checker);
 		tearDownAfterClass();
 		
 		
 	}
 
 	@Test
-	public void testRemoveBlob() {
-		fail("Not yet implemented");
+	public void testRemoveBlob() throws Exception {
+		//fail("Not yet implemented");
+		setUpBeforeClass();
+		boolean test = true;
+		Index in = new Index();
 		
+		String fileName = "testFile.txt";
+		Blob23 blobby = new Blob23("testFile.txt");
+		blobby.shaTheFile();
+		BufferedReader br = new BufferedReader(new FileReader("index"));
+		while(br.ready()) {
+			br.readLine();
+			if(br.readLine().equals(fileName + " : " + blobby.getShawedString())) {
+				test = false;
+				
+
+			}
+		}
+		assertTrue(test);
+		tearDownAfterClass();
 	}
 
 	@Test
@@ -82,11 +101,6 @@ public class IndexTest {
 			assertTrue(check);
 		}
 		
-	}
-
-	@Test
-	public void testGetPath() {
-		fail("Not yet implemented");
-	}
+	}	
 
 }
